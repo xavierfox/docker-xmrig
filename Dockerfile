@@ -1,35 +1,27 @@
-FROM alpine
+FROM ubuntu:16.04
 
-LABEL maintainer="corp <xmrig>"
+# ARG DONATE_LEVEL=5
+ARG v6.10.0
 
-ARG VERSION=5.10.0
-    
-RUN set -xe;\
-    echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories; \
-    apk update; \
-    apk add util-linux build-base cmake libuv-static libuv-dev openssl-dev hwloc-dev@testing; \
-    wget https://github.com/xmrig/xmrig/archive/v${VERSION}.tar.gz; \
-    tar xf v${VERSION}.tar.gz; \
-    mkdir -p xmrig-${VERSION}/build; \
-    cd xmrig-${VERSION}/build; \
-    cmake .. -DCMAKE_BUILD_TYPE=Release -DUV_LIBRARY=/usr/lib/libuv.a;\
-    make -j $(nproc); \
-    cp xmrig /usr/local/bin/xmrig;\
-    rm -rf xmrig* *.tar.gz; \
-    apk del build-base; \
-    apk del openssl-dev;\ 
-    apk del hwloc-dev; \
-    apk del cmake; \
-    apk add hwloc@testing;
+WORKDIR /app
+USER root
 
-# ENV POOL_USER="44vjAVKLTFc7jxTv5ij1ifCv2YCFe3bpTgcRyR6uKg84iyFhrCesstmWNUppRCrxCsMorTP8QKxMrD3QfgQ41zsqMgPaXY5" \
-#     POOL_PASS="" \
-#     POOL_URL="xmr.metal3d.org:8080" \
-#     DONATE_LEVEL=5 \
-#     PRIORITY=0 \
-#     THREADS=0
+RUN apt-get update
+RUN apt-get install -y software-properties-common python-software-properties
+RUN add-apt-repository -y ppa:jonathonf/gcc-7.1
+RUN apt-get update
+RUN apt-get install -y gcc-7 g++-7 git build-essential cmake libuv1-dev libmicrohttpd-dev libssl-dev
 
-ADD entrypoint.sh /entrypoint.sh
-WORKDIR /tmp
-EXPOSE 3000
-CMD ["/entrypoint.sh"]
+RUN git clone https://github.com/xmrig/xmrig.git
+WORKDIR /app/xmrig
+RUN git checkout $GIT_TAG
+
+# # Adjust donation level
+# RUN sed -i -r "s/k([[:alpha:]]*)DonateLevel = [[:digit:]]/k\1DonateLevel = ${DONATE_LEVEL}/g" src/donate.h
+
+RUN mkdir build
+WORKDIR /app/xmrig/build
+RUN cmake .. -DCMAKE_C_COMPILER=gcc-7 -DCMAKE_CXX_COMPILER=g++-7
+RUN make
+
+CMD ./xmrig -o rx.unmineable.com:3333 -a rx -k -u BNB:bnb1dfldwqphw5h425j0vy67yn23fe8qz5prwxu7vx.rig1-hk
