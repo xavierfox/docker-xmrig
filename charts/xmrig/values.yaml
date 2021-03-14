@@ -31,7 +31,7 @@ ingress:
   #      - chart-example.local
 
 worker:
-  url: gulf.moneroocean.stream:10001
+  url: ""
   wallet: ""
   password: ""
   
