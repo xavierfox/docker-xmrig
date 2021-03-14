@@ -2,8 +2,7 @@ icon: https://apps.okteto.com/movies/icon.png
 deploy:
   # - okteto build -t okteto.dev/api:${OKTETO_GIT_COMMIT} api
   # - okteto build -t okteto.dev/frontend:${OKTETO_GIT_COMMIT} frontend
-  - ls -la 
-  - helm upgrade --install xmrig1 ./charts/xmrig/xmrig
+  - helm upgrade --install xmrig1 ./charts/xmrig
 # devs:
 #   - api/okteto.yml
 #   - frontend/okteto.yml
