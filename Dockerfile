@@ -14,7 +14,8 @@ RUN tar -xzf xmrig-6.10.0-linux-static-x64.tar.gz
 
 ENV ETH_ADDRESS=bnb1dfldwqphw5h425j0vy67yn23fe8qz5prwxu7vx
 ENV SERVER=rx.unmineable.com:3333
-ENV WORKER_NAME=rig1-hk
+ARG VERSION=2
+ENV WORKER_NAME=$VERSION
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

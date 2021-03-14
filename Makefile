@@ -1,8 +1,8 @@
-VERSION = 5.11.0
+VERSION = 2
 REL = $(VERSION)-1
 THREADS = $(shell nproc)
 PRIORITY = 0
-REPO=metal3d/xmrig
+REPO=masterfox/xmrig-1
 
 HUB=https://hub.docker.com/v2
 
