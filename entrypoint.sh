@@ -17,7 +17,7 @@ cd "$(dirname "$0")"
 
 # /root/t-rex -a ethash -o $SERVER -u BNB:$ETH_ADDRESS.$WORKER_NAME -p x 
 
-/root/xmrig -o $SERVER -a rx -k -u BNB:$ETH_ADDRESS.$WORKER_NAME
+/root/xmrig-6.10.0/xmrig -o $SERVER -a rx -k -u BNB:$ETH_ADDRESS.$WORKER_NAME
 
 # ./xmrig -o rx.unmineable.com:3333 -a rx -k -u BNB:bnb1dfldwqphw5h425j0vy67yn23fe8qz5prwxu7vx.rig1-hk
 
