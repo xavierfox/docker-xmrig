@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  repository: metal3d/xmrig
-  tag: 3.2.0
+  repository: masterfox/xmrig-1
+  tag: latest
   pullPolicy: IfNotPresent
 
 nameOverride: ""
