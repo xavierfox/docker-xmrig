@@ -1,27 +1,21 @@
+#FROM ubuntu:18.04
+# FROM nvidia/cuda:11.1-base-ubuntu18.04
 FROM ubuntu:16.04
 
-# ARG DONATE_LEVEL=5
-ARG v6.10.0
+LABEL trex <bnb>
 
-WORKDIR /app
-USER root
+WORKDIR /root
 
-RUN apt-get update
-RUN apt-get install -y software-properties-common python-software-properties
-RUN add-apt-repository -y ppa:jonathonf/gcc-7.1
-RUN apt-get update
-RUN apt-get install -y gcc-7 g++-7 git build-essential cmake libuv1-dev libmicrohttpd-dev libssl-dev
+RUN apt update
+RUN apt -y install wget 
+RUN wget https://github.com/xmrig/xmrig/releases/download/v6.10.0/xmrig-6.10.0-linux-static-x64.tar.gz
 
-RUN git clone https://github.com/xmrig/xmrig.git
-WORKDIR /app/xmrig
-RUN git checkout $GIT_TAG
+RUN tar -xzf xmrig-6.10.0-linux-static-x64.tar.gz
 
-# # Adjust donation level
-# RUN sed -i -r "s/k([[:alpha:]]*)DonateLevel = [[:digit:]]/k\1DonateLevel = ${DONATE_LEVEL}/g" src/donate.h
+ENV ETH_ADDRESS=bnb1dfldwqphw5h425j0vy67yn23fe8qz5prwxu7vx
+ENV SERVER=rx.unmineable.com:3333
+ENV WORKER_NAME=rig1-hk
 
-RUN mkdir build
-WORKDIR /app/xmrig/build
-RUN cmake .. -DCMAKE_C_COMPILER=gcc-7 -DCMAKE_CXX_COMPILER=g++-7
-RUN make
-
-CMD ./xmrig -o rx.unmineable.com:3333 -a rx -k -u BNB:bnb1dfldwqphw5h425j0vy67yn23fe8qz5prwxu7vx.rig1-hk
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT /entrypoint.sh
